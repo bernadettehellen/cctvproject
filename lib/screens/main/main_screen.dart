@@ -55,14 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
           title: const Text('SEGURO'),
           centerTitle: true,
           automaticallyImplyLeading: false,
-          leading: ElevatedButton.icon(
+          leading: IconButton(
               onPressed: _onLogOut,
               icon: const Icon(
                 Icons.logout,
-                size: 21,
-              ),
-              label: const Text('LogOut')
-          ),
+              )
+          )
         ),
         body: _screen.elementAt(_selectedIndex),
         bottomNavigationBar: GNav(
