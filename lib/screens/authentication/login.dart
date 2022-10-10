@@ -1,24 +1,24 @@
-import 'package:aplikasi/screen/resetpassword.dart';
-import 'package:aplikasi/utils/color_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:aplikasi/screen/signup.dart';
-import 'package:camera/camera.dart';
 
-import '../reusable_widgets/reusable_widget.dart';
-import 'home.dart';
+import '../../utils/color_utils.dart';
+import '../../reusable_widgets/reusable_widget.dart';
+import '../../globals/preferences.dart';
+import '../main/main_screen.dart';
+
+import 'signup.dart';
+import 'reset_password.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key, required this.camera}) : super(key: key);
-  final CameraDescription camera;
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,20 +50,36 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 forgetPassword(context),
                 firebaseUIButton(context, "Sign In", () {
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: _emailTextController.text,
-                          password: _passwordTextController.text)
-                      .then((value) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            settings: RouteSettings(arguments: value.user?.uid),
-                            builder: (context) =>
-                                HomeScreen(camera: widget.camera)));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
+                  if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_emailTextController.text)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Email format is incorrect'),
+                      ),
+                    );
+                  } else {
+                    FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                        email: _emailTextController.text,
+                        password: _passwordTextController.text)
+                        .then((value) {
+                      saveUID(value.user?.uid);
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const HomeScreen(
+                                initialIndex: 0,
+                              )
+                          )
+                      );
+                    }).onError((error, stackTrace) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(error.toString()),
+                        ),
+                      );
+                    });
+                  }
                 }),
                 signUpOption()
               ],
@@ -83,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
         GestureDetector(
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SignUpScreen()));
+                MaterialPageRoute(builder: (context) => const SignUpScreen()));
           },
           child: const Text(
             " Sign Up",
@@ -105,7 +121,7 @@ class _SignInScreenState extends State<SignInScreen> {
           textAlign: TextAlign.right,
         ),
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ResetPassword())),
+            context, MaterialPageRoute(builder: (context) => const ResetPassword())),
       ),
     );
   }

@@ -1,8 +1,9 @@
-import 'package:aplikasi/reusable_widgets/reusable_widget.dart';
-import 'package:aplikasi/screen/home.dart';
-import 'package:aplikasi/utils/color_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../reusable_widgets/reusable_widget.dart';
+import '../main/main_screen.dart';
+import '../../utils/color_utils.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -12,9 +13,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
-  TextEditingController _userNameTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _userNameTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(20, 120, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
                 child: Column(
                   children: <Widget>[
                     const SizedBox(
@@ -64,11 +65,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
                           .then((value) {
-                        print("Created New Account");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Created new account'),
+                            ),
+                        );
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()));
+                            MaterialPageRoute(builder: (context) => const HomeScreen(
+                              imageFromCamera: "",
+                              initialIndex: 0,
+                            )));
                       }).onError((error, stackTrace) {
-                        print("Error ${error.toString()}");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(error.toString()),
+                            ),
+                        );
                       });
                     })
                   ],
