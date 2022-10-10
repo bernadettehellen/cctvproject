@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CCTV extends StatefulWidget {
@@ -14,7 +15,22 @@ class _CCTVState extends State<CCTV> {
   @override
   initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations(
+      [
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft
+      ]
+    );
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp]
+    );
   }
 
   @override

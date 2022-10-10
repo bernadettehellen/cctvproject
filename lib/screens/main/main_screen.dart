@@ -90,14 +90,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-//child:  ElevatedButton(
-//child: Text("Register Face"),
-//onPressed: () {
-//FirebaseAuth.instance.signOut().then((value) {
-//print("Signed Out");
-//Navigator.push(context,
-//MaterialPageRoute(builder: (context) => SignInScreen()));
-//});
-//},
-//)
