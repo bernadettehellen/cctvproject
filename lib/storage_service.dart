@@ -12,7 +12,7 @@ class Storage {
   ) async {
     File file = File(filePath);
     try {
-      await storage.ref('$uid/$fileName').putFile(file);
+      await storage.ref('$uid/$fileName').putFile(file).then((p0) => print('$uid/$fileName'));
     } on firebase_storage.FirebaseException catch (e) {
       print(e);
     }
@@ -20,9 +20,10 @@ class Storage {
 
   Future<firebase_storage.ListResult> listFiles(String uid) async {
     firebase_storage.ListResult result = await storage.ref(uid).listAll();
-    result.items.forEach((firebase_storage.Reference ref) {
+    for (var ref in result.items) {
       ref.getDownloadURL();
-    });
+      print(ref.fullPath);
+    }
     return result;
   }
 
@@ -46,7 +47,6 @@ class Storage {
               final ref = storage.ref().child("$uid/$imageName");
               File(targetDir).create(recursive: true).then((File file) {
                 final downloadTask = ref.writeToFile(file);
-                print(targetDir);
                 downloadTask.snapshotEvents.listen((event) {
                   switch (event.state) {
                     case firebase_storage.TaskState.running:

@@ -1,6 +1,11 @@
-import 'package:aplikasi/screen/home.dart';
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
+import '../../main.dart';
+
+import 'main_screen.dart';
 
 class Camera extends StatefulWidget {
   const Camera({super.key});
@@ -12,12 +17,11 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  late List<CameraDescription> _cameras;
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(_cameras.first, ResolutionPreset.max);
+    _controller = CameraController(cameras.first, ResolutionPreset.max);
     _initializeControllerFuture = _controller.initialize();
   }
 
@@ -51,9 +55,13 @@ class _CameraState extends State<Camera> {
             if (!mounted) return;
 
             await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => InputPhoto(imageFromCamera: imagePath)));
+                builder: (context) => HomeScreen(
+                  imageFromCamera: imagePath,
+                  initialIndex: 0,
+                )
+            ));
           } catch (e) {
-            print(e);
+            log(e.toString());
           }
         },
         child: const Icon(Icons.camera_alt),
