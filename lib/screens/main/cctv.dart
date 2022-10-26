@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gesture_zoom_box/gesture_zoom_box.dart';
+import 'package:intl/intl.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class CCTV extends StatefulWidget {
@@ -19,6 +22,7 @@ class _CCTVState extends State<CCTV> {
   double newVidSizeHeight = 640;
 
   bool isLandscape = false;
+  late String _timeString;
 
   @override
   initState() {
@@ -31,14 +35,28 @@ class _CCTVState extends State<CCTV> {
       ]
     );
     isLandscape = false;
+    _timeString = _formatDateTime(DateTime.now());
+    Timer.periodic(const Duration(seconds: 1), (timer) => _getTime());
   }
 
   @override
   void dispose() {
+    widget.channel.sink.close();
     super.dispose();
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp]
     );
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return DateFormat("MM/dd hh:mm:ss aaa").format(dateTime);
+  }
+
+  void _getTime() {
+    final DateTime now = DateTime.now();
+    setState(() {
+      _timeString = _formatDateTime(now);
+    });
   }
 
   @override
@@ -58,9 +76,8 @@ class _CCTVState extends State<CCTV> {
           newVidSizeWidth = (vidWidth * newVidSizeHeight / vidHeight );
         }
 
-        return GestureZoomBox(
-          maxScale: 5.0,
-          doubleTapScale: 2.0,
+        return Container(
+          color: Colors.blueAccent,
           child: StreamBuilder(
               stream: widget.channel.stream,
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
@@ -69,11 +86,38 @@ class _CCTVState extends State<CCTV> {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  return Image.memory(
-                      snapshot.data,
-                      gaplessPlayback: true,
-                      width: newVidSizeWidth,
-                      height: newVidSizeHeight,
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Stack(
+                        children: <Widget>[
+                          GestureZoomBox(
+                            maxScale: 5.0,
+                            doubleTapScale: 2.0,
+                            child: Image.memory(
+                              snapshot.data,
+                              gaplessPlayback: true,
+                              width: newVidSizeWidth,
+                              height: newVidSizeHeight,
+                            ),
+                          ),
+
+                          Positioned.fill(
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Column(
+                                  children: <Widget>[
+                                    const SizedBox(height: 16,),
+                                    const Text("Camera View", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),),
+                                    const SizedBox(height: 4,),
+                                    Text("Live | $_timeString", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),),
+                                  ],
+                              ),
+                            )
+                          )
+                        ],
+                      ),
+                    ],
                   );
                 }
               }),
