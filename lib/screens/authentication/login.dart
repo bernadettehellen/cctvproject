@@ -63,6 +63,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         password: _passwordTextController.text)
                         .then((value) {
                       saveUID(value.user?.uid);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Login Success"),
+                          )
+                      );
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -72,10 +77,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               )
                           )
                       );
-                    }).onError((error, stackTrace) {
+                    }).onError((FirebaseAuthException error, stackTrace) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(error.toString()),
+                          content: Text(error.message!),
                         ),
                       );
                     });

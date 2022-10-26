@@ -79,10 +79,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               imageFromCamera: "",
                               initialIndex: 0,
                             )));
-                      }).onError((error, stackTrace) {
+                      }).onError((FirebaseAuthException error, stackTrace) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(error.toString()),
+                              content: Text("${error.message}"),
                             ),
                         );
                       });
