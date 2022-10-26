@@ -47,9 +47,22 @@ class _ResetPasswordState extends State<ResetPassword> {
                       height: 20,
                     ),
                     firebaseUIButton(context, "Reset Password", () {
-                      FirebaseAuth.instance
-                          .sendPasswordResetEmail(email: _emailTextController.text)
-                          .then((value) => Navigator.of(context).pop());
+                      try {
+                        FirebaseAuth.instance
+                            .sendPasswordResetEmail(email: _emailTextController.text)
+                            .then((value) => Navigator.of(context).pop());
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please check your email for reset password procedure"),
+                            )
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${e.message}"),
+                            )
+                        );
+                      }
                     })
                   ],
                 ),

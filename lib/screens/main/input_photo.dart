@@ -76,8 +76,8 @@ class _InputPhotoState extends State<InputPhoto> {
             .uploadFile(_uid, value, "$fileName$index")
             .then((value) {
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("done"),
+                  SnackBar(
+                    content: Text("${filePaths.length} photos uploaded"),
                   ),
               );
         });
@@ -88,7 +88,7 @@ class _InputPhotoState extends State<InputPhoto> {
           .then((value) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text("done from camera"),
+                content: Text("Photo Uploaded"),
               ),
             );
           });
