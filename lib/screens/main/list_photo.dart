@@ -27,9 +27,20 @@ class _ListPhotoState extends State<ListPhoto> {
     // 1 => SD Card
     // 0 => Internal Memory
     if (storageInfo.isNotEmpty) {
-      path = "${storageInfo[0].rootDir}/cctv/$_uid";
+      path = (storageInfo.length == 2) ? "${storageInfo[1].rootDir}/cctv/$_uid" : "${storageInfo[0].rootDir}/cctv/$_uid";
       if (await Permission.manageExternalStorage.request().isGranted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Downloading..."),
+            )
+        );
         storage.download(_uid, path);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Permission not granted, please allow this apps to access storage"),
+            )
+        );
       }
     }
   }
@@ -93,6 +104,11 @@ class _ListPhotoState extends State<ListPhoto> {
                                             _uid,
                                             snapshot.data!.items[index].name);
                                       });
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text("Deleted"),
+                                          )
+                                      );
                                     },
                                   );
                                 } else {
