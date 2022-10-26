@@ -171,59 +171,62 @@ class _InputPhotoState extends State<InputPhoto> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            photo(),
-            Container(
-              margin: const EdgeInsets.fromLTRB(32, 8.0, 32, 16),
-              child: TextField(
-                controller: fileEditController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter file name',
+      child: SingleChildScrollView(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              photo(),
+              Container(
+                margin: const EdgeInsets.fromLTRB(32, 8.0, 32, 16),
+                child: TextField(
+                  controller: fileEditController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter file name',
+                  ),
+                  onChanged: _onRename,
                 ),
-                onChanged: _onRename,
               ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    height: 36,
-                    child: ElevatedButton(
-                      onPressed: _pickFiles,
-                      child: const Text("Pick File"),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 36,
+                      child: ElevatedButton(
+                        onPressed: _pickFiles,
+                        child: const Text("Pick File"),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  SizedBox(
-                    width: 100,
-                    height: 36,
-                    child: ElevatedButton(
-                        onPressed: _camera, child: const Text("Camera")),
-                  )
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 36,
+                      child: ElevatedButton(
+                          onPressed: _camera, child: const Text("Camera")),
+                    )
+                  ],
+                ),
               ),
-            ),
-            (filePaths.isNotEmpty || imageFromCamera != "") ?
-            Container(
-              margin: const EdgeInsets.only(top: 16),
-              child: SizedBox(
-                width: 210,
-                height: 36,
-                child: ElevatedButton(
-                    onPressed: _upload, child: const Text("Upload")),
-              ),
-            ) :
-            Container()
-          ]),
+              (filePaths.isNotEmpty || imageFromCamera != "") ?
+              Container(
+                margin: const EdgeInsets.only(top: 16),
+                child: SizedBox(
+                  width: 210,
+                  height: 36,
+                  child: ElevatedButton(
+                      onPressed: _upload, child: const Text("Upload")),
+                ),
+              ) :
+              Container()
+            ]
+        )
+      )
     );
   }
 }
