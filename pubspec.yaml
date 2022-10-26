@@ -50,6 +50,9 @@ dependencies:
   path_provider_ex: ^1.0.1
   camera: ^0.10.0+3
   shared_preferences: ^2.0.15
+  web_socket_channel: ^2.2.0
+  gesture_zoom_box: ^0.0.4
+  intl: ^0.17.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
