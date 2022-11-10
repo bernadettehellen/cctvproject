@@ -31,8 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
     _screen = <Widget>[
       InputPhoto(imageFromCamera: (widget.imageFromCamera != null) ? widget.imageFromCamera : null),
       const ListPhoto(),
-      CCTV(
-        channel: IOWebSocketChannel.connect("ws://127.0.0.1:8000"), // change IP and port to target IP and port
+      const CCTV(
+        channel: "Put stream URL here",
+        // channel: IOWebSocketChannel.connect("ws://127.0.0.1:8000"), // change this IP and port to target IP and port
       )
     ];
   }
