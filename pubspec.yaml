@@ -53,6 +53,7 @@ dependencies:
   web_socket_channel: ^2.2.0
   gesture_zoom_box: ^0.0.4
   intl: ^0.17.0
+  flutter_mjpeg: ^2.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
