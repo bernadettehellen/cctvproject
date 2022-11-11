@@ -3,6 +3,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
 
+import '../../globals/database.dart';
+import '../../globals/history.dart';
 import '../../globals/preferences.dart';
 import '../../globals/storage.dart';
 
@@ -109,6 +111,7 @@ class _ListPhotoState extends State<ListPhoto> {
                                             content: Text("Deleted"),
                                           )
                                       );
+                                      dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 1, date: DateTime.now().millisecondsSinceEpoch));
                                     },
                                   );
                                 } else {
