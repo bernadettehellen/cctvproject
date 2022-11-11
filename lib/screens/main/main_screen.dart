@@ -1,9 +1,9 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'dart:core';
+import 'package:aplikasi/screens/main/history.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/io.dart';
 
 import '../../globals/preferences.dart';
 import '../authentication/login.dart';
@@ -34,7 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
       const CCTV(
         channel: "Put stream URL here",
         // channel: IOWebSocketChannel.connect("ws://127.0.0.1:8000"), // change this IP and port to target IP and port
-      )
+      ),
+      const HistoryScreen()
     ];
   }
 
@@ -64,7 +65,21 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(
                 Icons.logout,
               )
-          )
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: (){setState(() {
+                  _selectedIndex = 3;
+                });},
+                child: const Icon(
+                  Icons.history,
+                  size: 26,
+                )
+              ),
+            )
+          ],
         ),
         body: _screen.elementAt(_selectedIndex),
         bottomNavigationBar: GNav(

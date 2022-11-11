@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:aplikasi/globals/database.dart';
+import 'package:aplikasi/globals/history.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -82,6 +84,7 @@ class _InputPhotoState extends State<InputPhoto> {
               );
         });
       });
+      dbn.insertNotification(Log(title: "upload photo", message: "success uploading ${filePaths.length}", type: 1, date: DateTime.now().millisecondsSinceEpoch));
     } else if (imageFromCamera != "") {
       storage
           .uploadFile(_uid, imageFromCamera, fileName)
@@ -92,6 +95,7 @@ class _InputPhotoState extends State<InputPhoto> {
               ),
             );
           });
+      dbn.insertNotification(Log(title: "upload photo", message: "success uploading 1 photo", type: 1, date: DateTime.now().millisecondsSinceEpoch));
     }
   }
 
