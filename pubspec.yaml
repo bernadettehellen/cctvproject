@@ -54,6 +54,8 @@ dependencies:
   gesture_zoom_box: ^0.0.4
   intl: ^0.17.0
   flutter_mjpeg: ^2.0.3
+  sqflite: ^2.2.0+3
+  path: ^1.8.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
