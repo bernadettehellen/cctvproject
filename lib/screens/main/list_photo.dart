@@ -111,7 +111,7 @@ class _ListPhotoState extends State<ListPhoto> {
                                             content: Text("Deleted"),
                                           )
                                       );
-                                      dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 1, date: DateTime.now().millisecondsSinceEpoch));
+                                      dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 2, date: DateTime.now().millisecondsSinceEpoch));
                                     },
                                   );
                                 } else {
