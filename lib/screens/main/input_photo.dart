@@ -73,28 +73,48 @@ class _InputPhotoState extends State<InputPhoto> {
 
   void _upload() {
     if (filePaths.isNotEmpty) {
-      filePaths.asMap().forEach((index, value) {
-        storage
-            .uploadFile(_uid, value, "$fileName$index")
-            .then((value) {
+      filePaths.asMap().forEach((index, item) {
+        storage.checkIfNameAvailable(_uid, fileName).then((value) {
+          if (value == true) {
+            storage
+                .uploadFile(_uid, item, "$fileName$index")
+                .then((value) {
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("${filePaths.length} photos uploaded"),
-                  ),
+                SnackBar(
+                  content: Text("${filePaths.length} photos uploaded"),
+                ),
               );
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Item with this name already exists"),
+              ),
+            );
+          }
         });
       });
       dbn.insertNotification(Log(title: "upload photo", message: "success uploading ${filePaths.length}", type: 1, date: DateTime.now().millisecondsSinceEpoch));
     } else if (imageFromCamera != "") {
-      storage
-          .uploadFile(_uid, imageFromCamera, fileName)
-          .then((value) {
+      storage.checkIfNameAvailable(_uid, fileName).then((value) {
+        if (value == true) {
+          storage
+              .uploadFile(_uid, imageFromCamera, fileName)
+              .then((value) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Photo Uploaded"),
               ),
             );
           });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Item with this name already exists"),
+            ),
+          );
+        }
+      });
       dbn.insertNotification(Log(title: "upload photo", message: "success uploading 1 photo", type: 1, date: DateTime.now().millisecondsSinceEpoch));
     }
   }

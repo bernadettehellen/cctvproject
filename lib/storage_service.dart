@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/cupertino.dart';
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =
@@ -30,6 +31,18 @@ class Storage {
   Future<String> toUrl(String uid, String imageName) async {
     String url = await storage.ref('$uid/$imageName').getDownloadURL();
     return url;
+  }
+
+  Future<bool> checkIfNameAvailable(String uid, String imageName) async {
+    try{
+      await storage.ref('$uid/$imageName').getDownloadURL();
+    } on firebase_storage.FirebaseException catch (e) {
+      if (e.code == "object-not-found"){
+        debugPrint("code : ${e.code}");
+        return true;
+      }
+    }
+    return false;
   }
 
   Future<firebase_storage.ListResult> delete(
