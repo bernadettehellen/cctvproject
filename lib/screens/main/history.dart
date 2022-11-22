@@ -1,6 +1,5 @@
 import 'package:aplikasi/globals/database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../../globals/history.dart';
@@ -74,8 +73,6 @@ class Item extends StatelessWidget {
       case 1:
         return Colors.lightBlue;
       case 2:
-        return Colors.yellow;
-      case 3:
         return Colors.red;
       default:
         return Colors.black.withOpacity(0.3);
