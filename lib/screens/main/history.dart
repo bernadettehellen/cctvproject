@@ -29,6 +29,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
           builder: (BuildContext context, AsyncSnapshot<List<Log>> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return ListView.separated(
+                reverse: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
