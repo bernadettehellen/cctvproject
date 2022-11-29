@@ -74,38 +74,40 @@ class _CCTVState extends State<CCTV> {
           newVidSizeWidth = (vidWidth * newVidSizeHeight / vidHeight );
         }
 
-        return Container(
-          color: Colors.blueAccent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  GestureZoomBox(
-                    maxScale: 5.0,
-                    doubleTapScale: 2.0,
-                    child: Mjpeg(
-                      isLive: isRunning,
-                      stream: widget.channel ,
-                    ),
-                  ),
-                  Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(height: 16,),
-                            const Text("Camera View", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),),
-                            const SizedBox(height: 4,),
-                            Text("Live | $_timeString", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),),
-                          ],
+        return Expanded(
+            child: Container(
+                color: Colors.blueAccent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [
+                        GestureZoomBox(
+                          maxScale: 5.0,
+                          doubleTapScale: 2.0,
+                          child: Mjpeg(
+                            isLive: isRunning,
+                            stream: widget.channel ,
+                          ),
                         ),
-                      )
-                  )
-                ],
-              )
-            ],
-          )
+                        Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(height: 16,),
+                                  const Text("Camera View", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),),
+                                  const SizedBox(height: 4,),
+                                  Text("Live | $_timeString", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w300),),
+                                ],
+                              ),
+                            )
+                        )
+                      ],
+                    )
+                  ],
+                )
+            )
         );
       },
     );
