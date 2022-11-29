@@ -59,23 +59,23 @@ class _CCTVState extends State<CCTV> {
   @override
   Widget build(BuildContext context) {
     bool isRunning = true;
-    return OrientationBuilder(
-      builder: (context, orientation){
-        var screenWidth = MediaQuery.of(context).size.width;
-        var screenHeight = MediaQuery.of(context).size.height;
+    return Expanded(
+        child: OrientationBuilder(
+          builder: (context, orientation){
+            var screenWidth = MediaQuery.of(context).size.width;
+            var screenHeight = MediaQuery.of(context).size.height;
 
-        if (orientation == Orientation.portrait) {
-          isLandscape = false;
-          newVidSizeWidth = (screenWidth > vidWidth ? vidWidth : screenWidth) as double;
-          newVidSizeHeight = (vidHeight * newVidSizeWidth / vidWidth );
-        } else {
-          isLandscape = true;
-          newVidSizeHeight = (screenHeight > vidHeight ? vidHeight : screenHeight) as double;
-          newVidSizeWidth = (vidWidth * newVidSizeHeight / vidHeight );
-        }
+            if (orientation == Orientation.portrait) {
+              isLandscape = false;
+              newVidSizeWidth = (screenWidth > vidWidth ? vidWidth : screenWidth) as double;
+              newVidSizeHeight = (vidHeight * newVidSizeWidth / vidWidth );
+            } else {
+              isLandscape = true;
+              newVidSizeHeight = (screenHeight > vidHeight ? vidHeight : screenHeight) as double;
+              newVidSizeWidth = (vidWidth * newVidSizeHeight / vidHeight );
+            }
 
-        return Expanded(
-            child: Container(
+            return Container(
                 color: Colors.blueAccent,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -107,9 +107,9 @@ class _CCTVState extends State<CCTV> {
                     )
                   ],
                 )
-            )
-        );
-      },
+            );
+          },
+        )
     );
   }
 }
