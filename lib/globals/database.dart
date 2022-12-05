@@ -19,4 +19,13 @@ class DatabaseNotif {
       return Log(id: maps[index]['id'], title: maps[index]['title'], message: maps[index]['message'], type: maps[index]['type'], date: maps[index]['date']);
     });
   }
+
+  Future<List<Log>> deleteAll() async {
+    final db = await database;
+    await db.rawDelete("Delete from notification");
+    final List<Map<String, dynamic>> maps = await db.query('notification');
+    return List.generate(maps.length, (index) {
+      return Log(id: maps[index]['id'], title: maps[index]['title'], message: maps[index]['message'], type: maps[index]['type'], date: maps[index]['date']);
+    });
+  }
 }

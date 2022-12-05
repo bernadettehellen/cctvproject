@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../reusable_widgets/reusable_widget.dart';
-import '../../utils/color_utils.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key? key}) : super(key: key);
@@ -25,14 +24,9 @@ class _ResetPasswordState extends State<ResetPassword> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
+      body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                hexStringToColor("ffafbd"),
-                hexStringToColor("ffc3a0")
-              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),

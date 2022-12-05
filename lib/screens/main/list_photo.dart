@@ -62,84 +62,89 @@ class _ListPhotoState extends State<ListPhoto> {
 
   @override
   Widget build(BuildContext context) {
-    return (onLoading == true) ?
-    const Center(
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: CircularProgressIndicator()
-        )
-    ) :
-    ListView(
-      children: [
-        Container(
-            padding: const EdgeInsets.only(top: 8),
-            child: FutureBuilder(
-                future: _result,
-                builder: (context,
-                    AsyncSnapshot<firebase_storage.ListResult> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    return GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio:
-                            MediaQuery.of(context).size.width /
-                                (MediaQuery.of(context).size.height)),
-                        itemCount: snapshot.data!.items.length,
-                        itemBuilder: (context, index) {
-                          return FutureBuilder(
-                              future: storage.toUrl(
-                                  _uid, snapshot.data!.items[index].name),
-                              builder: (context, AsyncSnapshot<String> snap) {
-                                if (snap.connectionState ==
-                                    ConnectionState.done) {
-                                  return Card(
-                                    imageName: snapshot.data!.items[index].name,
-                                    imageUrl: snap.data!,
-                                    onButtonPressed: () {
-                                      setState(() {
-                                        _result = storage.delete(
-                                            _uid,
-                                            snapshot.data!.items[index].name);
-                                      });
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
-                                            content: Text("Deleted"),
-                                          )
-                                      );
-                                      dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 2, date: DateTime.now().millisecondsSinceEpoch));
-                                    },
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              });
-                        });
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting ||
-                      !snapshot.hasData) {
-                    return const Center(
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: CircularProgressIndicator(),
-                      )
-                    );
-                  }
-                  return Container();
-                })),
-        Container(
-          margin: const EdgeInsets.fromLTRB(64, 16, 64, 8),
-          child: ElevatedButton(
-            onPressed: _onDownload,
-            child: const Text("Save to SD Card"),
-          ),
-        )
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("My Photo"),
+      ),
+      body: (onLoading == true) ?
+      const Center(
+          child: SizedBox(
+              width: 50,
+              height: 50,
+              child: CircularProgressIndicator()
+          )
+      ) :
+      ListView(
+        children: [
+          Container(
+              padding: const EdgeInsets.only(top: 8),
+              child: FutureBuilder(
+                  future: _result,
+                  builder: (context,
+                      AsyncSnapshot<firebase_storage.ListResult> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData) {
+                      return GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          physics: const ScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio:
+                              MediaQuery.of(context).size.width /
+                                  (MediaQuery.of(context).size.height)),
+                          itemCount: snapshot.data!.items.length,
+                          itemBuilder: (context, index) {
+                            return FutureBuilder(
+                                future: storage.toUrl(
+                                    _uid, snapshot.data!.items[index].name),
+                                builder: (context, AsyncSnapshot<String> snap) {
+                                  if (snap.connectionState ==
+                                      ConnectionState.done) {
+                                    return Card(
+                                      imageName: snapshot.data!.items[index].name,
+                                      imageUrl: snap.data!,
+                                      onButtonPressed: () {
+                                        setState(() {
+                                          _result = storage.delete(
+                                              _uid,
+                                              snapshot.data!.items[index].name);
+                                        });
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Deleted"),
+                                            )
+                                        );
+                                        dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 2, date: DateTime.now().millisecondsSinceEpoch));
+                                      },
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                });
+                          });
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        !snapshot.hasData) {
+                      return const Center(
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(),
+                          )
+                      );
+                    }
+                    return Container();
+                  })),
+          Container(
+            margin: const EdgeInsets.fromLTRB(64, 16, 64, 8),
+            child: ElevatedButton(
+              onPressed: _onDownload,
+              child: const Text("Save to SD Card"),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -161,27 +166,20 @@ class Card extends StatefulWidget {
 class _CardState extends State<Card> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black
-        )
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 300,
+            child: Image.network(widget.imageUrl, fit: BoxFit.contain),
+          ),
+          Text(widget.imageName,
+              softWrap: false, textAlign: TextAlign.center),
+          ElevatedButton(
+              onPressed: widget.onButtonPressed, child: const Text("Delete"))
+        ],
       ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 300,
-              child: Image.network(widget.imageUrl, fit: BoxFit.contain),
-            ),
-            Text(widget.imageName,
-                softWrap: false, textAlign: TextAlign.center),
-            ElevatedButton(
-                onPressed: widget.onButtonPressed, child: const Text("Delete"))
-          ],
-        ),
-      )
     );
   }
 }

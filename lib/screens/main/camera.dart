@@ -57,7 +57,6 @@ class _CameraState extends State<Camera> {
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => HomeScreen(
                   imageFromCamera: imagePath,
-                  initialIndex: 0,
                 )
             ));
           } catch (e) {

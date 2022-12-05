@@ -1,5 +1,5 @@
-name: aplikasi
-description: A new Flutter project.
+name: seguro
+description: Apps for controlling smart lock
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -56,7 +56,11 @@ dependencies:
   flutter_mjpeg: ^2.0.3
   sqflite: ^2.2.0+3
   path: ^1.8.2
+  teledart: ^0.3.4
+
 dev_dependencies:
+  flutter_launcher_icons: ^0.11.0
+
   flutter_test:
     sdk: flutter
 
@@ -67,6 +71,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/image/143215.jpg"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:aplikasi/globals/database.dart';
-import 'package:aplikasi/globals/history.dart';
+import 'package:seguro/globals/database.dart';
+import 'package:seguro/globals/history.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -9,10 +9,12 @@ import '../../globals/preferences.dart';
 import '../../globals/storage.dart';
 
 import 'camera.dart';
+import 'list_photo.dart';
 
 class InputPhoto extends StatefulWidget {
   const InputPhoto({Key? key, this.imageFromCamera}) : super(key: key);
   final String? imageFromCamera;
+
   @override
   _InputPhotoState createState() => _InputPhotoState();
 }
@@ -27,7 +29,8 @@ class _InputPhotoState extends State<InputPhoto> {
   @override
   void initState() {
     super.initState();
-    imageFromCamera = (widget.imageFromCamera == null) ? "" : widget.imageFromCamera!;
+    imageFromCamera =
+        (widget.imageFromCamera == null) ? "" : widget.imageFromCamera!;
     getUID().then((value) {
       setState(() {
         _uid = value;
@@ -76,13 +79,15 @@ class _InputPhotoState extends State<InputPhoto> {
       filePaths.asMap().forEach((index, item) {
         storage.checkIfNameAvailable(_uid, fileName).then((value) {
           if (value == true) {
-            storage
-                .uploadFile(_uid, item, "$fileName$index")
-                .then((value) {
+            storage.uploadFile(_uid, item, "$fileName$index").then((value) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text("${filePaths.length} photos uploaded"),
                 ),
+              );
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ListPhoto())
               );
             });
           } else {
@@ -94,17 +99,23 @@ class _InputPhotoState extends State<InputPhoto> {
           }
         });
       });
-      dbn.insertNotification(Log(title: "upload photo", message: "success uploading ${filePaths.length}", type: 1, date: DateTime.now().millisecondsSinceEpoch));
+      dbn.insertNotification(Log(
+          title: "upload photo",
+          message: "success uploading ${filePaths.length}",
+          type: 1,
+          date: DateTime.now().millisecondsSinceEpoch));
     } else if (imageFromCamera != "") {
       storage.checkIfNameAvailable(_uid, fileName).then((value) {
         if (value == true) {
-          storage
-              .uploadFile(_uid, imageFromCamera, fileName)
-              .then((value) {
+          storage.uploadFile(_uid, imageFromCamera, fileName).then((value) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Photo Uploaded"),
               ),
+            );
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const ListPhoto())
             );
           });
         } else {
@@ -115,16 +126,17 @@ class _InputPhotoState extends State<InputPhoto> {
           );
         }
       });
-      dbn.insertNotification(Log(title: "upload photo", message: "success uploading 1 photo", type: 1, date: DateTime.now().millisecondsSinceEpoch));
+      dbn.insertNotification(Log(
+          title: "upload photo",
+          message: "success uploading 1 photo",
+          type: 1,
+          date: DateTime.now().millisecondsSinceEpoch));
     }
   }
 
   void _camera() {
-    Navigator.push(context,
-        MaterialPageRoute(
-            builder: (context) => const Camera()
-        )
-    );
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Camera()));
   }
 
   Widget _banner() {
@@ -144,8 +156,7 @@ class _InputPhotoState extends State<InputPhoto> {
               child: const Text("Please upload your image"),
             )
           ],
-        )
-    );
+        ));
   }
 
   Widget _listPhoto() {
@@ -164,9 +175,7 @@ class _InputPhotoState extends State<InputPhoto> {
               return Image.file(
                 File(filePaths[index]),
               );
-            })
-        )
-    );
+            })));
   }
 
   Widget _showPhoto() {
@@ -178,8 +187,7 @@ class _InputPhotoState extends State<InputPhoto> {
             File(imageFromCamera),
             fit: BoxFit.contain,
           ),
-        )
-    );
+        ));
   }
 
   Widget photo() {
@@ -194,63 +202,83 @@ class _InputPhotoState extends State<InputPhoto> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              photo(),
-              Container(
-                margin: const EdgeInsets.fromLTRB(32, 8.0, 32, 16),
-                child: TextField(
-                  controller: fileEditController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter file name',
-                  ),
-                  onChanged: _onRename,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Input Photo"),
+      ),
+      body: Center(
+          child: SingleChildScrollView(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      width: 100,
-                      height: 36,
-                      child: ElevatedButton(
-                        onPressed: _pickFiles,
-                        child: const Text("Pick File"),
+                    photo(),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(32, 8.0, 32, 16),
+                      child: TextField(
+                        controller: fileEditController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter file name',
+                        ),
+                        onChanged: _onRename,
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            height: 36,
+                            child: ElevatedButton(
+                              onPressed: _pickFiles,
+                              child: const Text("Pick File"),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 36,
+                            child: ElevatedButton(
+                                onPressed: _camera,
+                                child: const Text("Camera")
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 36,
+                            child: ElevatedButton(
+                                onPressed: _camera,
+                                child: const Text("CCTV")
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      width: 100,
-                      height: 36,
-                      child: ElevatedButton(
-                          onPressed: _camera, child: const Text("Camera")),
-                    )
-                  ],
-                ),
-              ),
-              (filePaths.isNotEmpty || imageFromCamera != "") ?
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: SizedBox(
-                  width: 210,
-                  height: 36,
-                  child: ElevatedButton(
-                      onPressed: _upload, child: const Text("Upload")),
-                ),
-              ) :
-              Container()
-            ]
-        )
-      )
+                    (filePaths.isNotEmpty || imageFromCamera != "") ?
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      child: SizedBox(
+                        width: 320,
+                        height: 36,
+                        child: ElevatedButton(
+                            onPressed: _upload,
+                            child: const Text("Upload")
+                        ),
+                      ),
+                    ) :
+                    Container()
+                  ]
+              )
+          )
+      ),
     );
   }
 }

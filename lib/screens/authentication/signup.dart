@@ -77,7 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => const HomeScreen(
                               imageFromCamera: "",
-                              initialIndex: 0,
                             )));
                       }).onError((FirebaseAuthException error, stackTrace) {
                         ScaffoldMessenger.of(context).showSnackBar(

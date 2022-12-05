@@ -1,4 +1,4 @@
 // global storage object
-import 'package:aplikasi/storage_service.dart';
+import 'package:seguro/storage_service.dart';
 
 final Storage storage = Storage();

@@ -72,9 +72,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                              const HomeScreen(
-                                initialIndex: 0,
-                              )
+                              const HomeScreen()
                           )
                       );
                     }).onError((FirebaseAuthException error, stackTrace) {

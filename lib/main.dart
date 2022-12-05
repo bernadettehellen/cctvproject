@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: (_isLoggedIn == false) ?
         const SignInScreen() :
-        const HomeScreen(initialIndex: 0),
+        const HomeScreen(),
     );
   }
 }

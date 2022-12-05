@@ -1,8 +1,12 @@
-import 'package:aplikasi/globals/database.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:seguro/globals/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:seguro/screens/main/main_screen.dart';
 
 import '../../globals/history.dart';
+import '../../globals/preferences.dart';
+import '../authentication/login.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -19,44 +23,116 @@ class _HistoryScreenState extends State<HistoryScreen> {
     super.initState();
     _logs = dbn.history();
   }
+
+  void _onLogOut() {
+    logOut().then((value) => {
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const SignInScreen())
+      )
+    });
+  }
+
+  void _onGButtonTapped(int index) {
+    switch (index) {
+      case 0:
+        {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
+          break;
+        }
+      case 2:
+        {
+          _onLogOut();
+          break;
+        }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: SingleChildScrollView(
-        child: FutureBuilder(
-          future: _logs,
-          builder: (BuildContext context, AsyncSnapshot<List<Log>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return ListView.separated(
-                reverse: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data!.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Item(
-                    id: snapshot.data![index].id,
-                    title: snapshot.data![index].title,
-                    message: snapshot.data![index].message,
-                    type: snapshot.data![index].type,
-                    date: snapshot.data![index].date,
-                  );
-                }, separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 10);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Activity Log'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _logs = dbn.deleteAll();
+                });
               },
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
+              child: const Icon(Icons.delete),
+            ),
+          )
+        ],
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: SingleChildScrollView(
+          child: FutureBuilder(
+            future: _logs,
+            builder: (BuildContext context, AsyncSnapshot<List<Log>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return ListView.separated(
+                  reverse: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Item(
+                      id: snapshot.data![index].id,
+                      title: snapshot.data![index].title,
+                      message: snapshot.data![index].message,
+                      type: snapshot.data![index].type,
+                      date: snapshot.data![index].date,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(height: 10);
+                  },
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
         ),
+      ),
+      bottomNavigationBar: GNav(
+        backgroundColor: Colors.blue,
+        color: Colors.white,
+        activeColor: Colors.white,
+        tabs: const [
+          GButton(
+            icon: Icons.home,
+            text: 'Home',
+          ),
+          GButton(
+            icon: Icons.history,
+            text: 'History',
+          ),
+          GButton(
+            icon: Icons.logout,
+            text: 'Log Out',
+          ),
+        ],
+        selectedIndex: 1,
+        onTabChange: _onGButtonTapped,
       ),
     );
   }
 }
 
 class Item extends StatelessWidget {
-  const Item({Key? key, required this.id, required this.title, required this.message, required this.type, required this.date}) : super(key: key);
+  const Item(
+      {Key? key,
+      required this.id,
+      required this.title,
+      required this.message,
+      required this.type,
+      required this.date})
+      : super(key: key);
   final int id;
   final String title;
   final String message;
@@ -71,7 +147,7 @@ class Item extends StatelessWidget {
   }
 
   Color getColor(int type) {
-    switch(type) {
+    switch (type) {
       case 1:
         return Colors.lightBlue;
       case 2:
@@ -84,18 +160,14 @@ class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-              color: getColor(type),
-              width: 3
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(12))
-        ),
-        child : ListTile(
-            title: Text(title),
-            subtitle: Text(message),
-            trailing: Text(convertTimeStamp(date)),
-            dense : true),
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: getColor(type), width: 3),
+          borderRadius: const BorderRadius.all(Radius.circular(12))),
+      child: ListTile(
+          title: Text(title),
+          subtitle: Text(message),
+          trailing: Text(convertTimeStamp(date)),
+          dense: true),
     );
   }
 }
