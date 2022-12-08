@@ -75,9 +75,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                         );
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen(
-                              imageFromCamera: "",
-                            )));
+                            MaterialPageRoute(builder: (context) => const HomeScreen())
+                        );
                       }).onError((FirebaseAuthException error, stackTrace) {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -88,7 +87,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     })
                   ],
                 ),
-              ))),
+              )
+          )
+      ),
     );
   }
 }

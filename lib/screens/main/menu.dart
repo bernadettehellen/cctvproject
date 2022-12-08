@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:seguro/screens/main/chat_command.dart';
 
 import '../../globals/preferences.dart';
@@ -13,20 +12,16 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       margin: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Expanded(
+          Expanded(
             flex: 1,
             child: Center(
-              child: Text(
-                'Welcome Home',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
+              child: Image.asset(
+                "lib/assets/image/143215.jpg",
               ),
             ),
           ),
@@ -41,12 +36,12 @@ class Menu extends StatelessWidget {
                       children: const [
                         ButtonImage(
                           name: "Input Photo",
-                          iconURL: "lib/assets/image/input_image.jpg",
+                          iconURL: "lib/assets/image/camera.jpeg",
                           navigateTo: InputPhoto(),
                         ),
                         ButtonImage(
                           name: "My Photo",
-                          iconURL: "lib/assets/image/my_pict.png",
+                          iconURL: "lib/assets/image/my_picture.jpeg",
                           navigateTo: ListPhoto(),
                         ),
                       ],
@@ -58,7 +53,7 @@ class Menu extends StatelessWidget {
                       children: const [
                         ButtonImage(
                           name: "CCTV",
-                          iconURL: "lib/assets/image/cctv.png",
+                          iconURL: "lib/assets/image/icon_cctv.jpeg",
                           navigateTo: CCTV(channel: "channel"),
                         ),
                         LockWidget(),
@@ -66,7 +61,8 @@ class Menu extends StatelessWidget {
                     ),
                   ),
                 ],
-              )),
+              )
+          ),
         ],
       ),
     );
@@ -103,7 +99,11 @@ class ButtonImage extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => navigateTo))
                   },
-                  child: Image.asset(iconURL),
+                  child: Image.asset(
+                    iconURL,
+                    width: 75,
+                    height: 75,
+                  ),
                 )
             ),
             Expanded(
@@ -162,9 +162,11 @@ class _LockWidgetState extends State<LockWidget> {
           Expanded(
               flex: 2,
               child: Switch(
-                activeColor: Colors.green,
-                inactiveThumbColor: Colors.red,
+                activeColor: Colors.green.withOpacity(0.1),
+                inactiveThumbColor: Colors.red.withOpacity(0.1),
                 inactiveTrackColor: Colors.red,
+                inactiveThumbImage: const AssetImage("lib/assets/image/unlocked_switch.png"),
+                activeThumbImage: const AssetImage("lib/assets/image/locked_switch.png"),
                 value: _state,
                 onChanged: _onSwitch,
               )

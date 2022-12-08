@@ -13,7 +13,10 @@ class Storage {
   ) async {
     File file = File(filePath);
     try {
-      await storage.ref('$uid/$fileName').putFile(file).then((p0) => print('$uid/$fileName'));
+      await storage
+          .ref('$uid/$fileName')
+          .putFile(file)
+          .then((p0) => print('$uid/$fileName'));
     } on firebase_storage.FirebaseException catch (e) {
       print(e);
     }
@@ -23,7 +26,6 @@ class Storage {
     firebase_storage.ListResult result = await storage.ref(uid).listAll();
     for (var ref in result.items) {
       ref.getDownloadURL();
-      print(ref.fullPath);
     }
     return result;
   }
@@ -34,10 +36,10 @@ class Storage {
   }
 
   Future<bool> checkIfNameAvailable(String uid, String imageName) async {
-    try{
+    try {
       await storage.ref('$uid/$imageName').getDownloadURL();
     } on firebase_storage.FirebaseException catch (e) {
-      if (e.code == "object-not-found"){
+      if (e.code == "object-not-found") {
         debugPrint("code : ${e.code}");
         return true;
       }

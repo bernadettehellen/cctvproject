@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:seguro/screens/main/input_photo.dart';
 
 import '../../main.dart';
 
@@ -55,7 +56,7 @@ class _CameraState extends State<Camera> {
             if (!mounted) return;
 
             await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HomeScreen(
+                builder: (context) => InputPhoto(
                   imageFromCamera: imagePath,
                 )
             ));

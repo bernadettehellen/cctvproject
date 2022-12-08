@@ -11,8 +11,7 @@ import '../authentication/login.dart';
 import 'menu.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, this.imageFromCamera}) : super(key: key);
-  final String? imageFromCamera;
+  const HomeScreen({Key? key}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
