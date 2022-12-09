@@ -4,13 +4,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'screens/authentication/login.dart';
 import 'screens/main/main_screen.dart';
-
 import 'globals/preferences.dart';
 import 'globals/database.dart';
-
 late List<CameraDescription> cameras;
 
 Future<void> main() async {
@@ -29,7 +26,7 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp]
   ).then((_) =>
-    runApp(const MyApp())
+      runApp(const MyApp())
   );
 }
 
@@ -56,13 +53,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SEGURO',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: (_isLoggedIn == false) ?
-        const SignInScreen() :
-        const HomeScreen(),
+      const SignInScreen() :
+      const HomeScreen(),
     );
   }
 }

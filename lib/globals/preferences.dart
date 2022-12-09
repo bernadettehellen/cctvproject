@@ -33,3 +33,13 @@ Future<bool> getLockStatus() async {
   final prefs = await SharedPreferences.getInstance();
   return prefs.getBool('status') ?? false;
 }
+
+Future<void> saveLightStatus(bool status) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setBool('status', status);
+}
+
+Future<bool> getLightStatus() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('status') ?? false;
+}

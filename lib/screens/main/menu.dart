@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:seguro/screens/main/chat_command.dart';
 
 import '../../globals/preferences.dart';
+import '../../reusable_widgets/reusable_widget.dart';
 import 'input_photo.dart';
 import 'list_photo.dart';
 import 'cctv.dart';
@@ -18,11 +19,9 @@ class Menu extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Center(
-              child: Image.asset(
-                "lib/assets/image/143215.jpg",
-              ),
+              child: logoWidget("lib/assets/image/segurologo.jpg"),
             ),
           ),
           Expanded(
@@ -44,6 +43,11 @@ class Menu extends StatelessWidget {
                           iconURL: "lib/assets/image/my_picture.jpeg",
                           navigateTo: ListPhoto(),
                         ),
+                        ButtonImage(
+                          name: "CCTV",
+                          iconURL: "lib/assets/image/icon_cctv.jpeg",
+                          navigateTo: CCTV(channel: "channel"),
+                        ),
                       ],
                     ),
                   ),
@@ -51,12 +55,8 @@ class Menu extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [
-                        ButtonImage(
-                          name: "CCTV",
-                          iconURL: "lib/assets/image/icon_cctv.jpeg",
-                          navigateTo: CCTV(channel: "channel"),
-                        ),
                         LockWidget(),
+                        LightWidget(),
                       ],
                     ),
                   ),
@@ -87,7 +87,7 @@ class ButtonImage extends StatelessWidget {
           border: Border.all(),
           borderRadius: BorderRadius.circular(17)
       ),
-      height: 150,
+      height: 100,
       width: 100,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,14 +101,14 @@ class ButtonImage extends StatelessWidget {
                   },
                   child: Image.asset(
                     iconURL,
-                    width: 75,
-                    height: 75,
+                    width: 50,
+                    height: 50,
                   ),
                 )
             ),
             Expanded(
                 child: Center(
-                  child: Text(name),
+                  child: Text(name, style: TextStyle(fontWeight: FontWeight. bold),)
                 )
             )
           ]
@@ -123,16 +123,15 @@ class LockWidget extends StatefulWidget {
   @override
   State<LockWidget> createState() => _LockWidgetState();
 }
-
 class _LockWidgetState extends State<LockWidget> {
   bool _state = false;
 
   @override
   void initState() {
     getLockStatus().then( (value) =>
-      setState(() {
-        _state = value;
-      })
+        setState(() {
+          _state = value;
+        })
     );
     super.initState();
   }
@@ -151,33 +150,133 @@ class _LockWidgetState extends State<LockWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: (_state == true ? Colors.green : Colors.red)),
-        borderRadius: BorderRadius.circular(17)
+          border: Border.all(color: (_state == true ? Colors.red : Colors.green)),
+          borderRadius: BorderRadius.circular(17)
       ),
       height: 150,
-      width: 100,
+      width: 150,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Column(
+              children: [
+                Center(
+                    child: Row(
+                        children:[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20.0, 35.0, 10.0,0.0),
+                            child: Image.asset('lib/assets/image/locked_switch.png', width: 50,height: 50),
+                          ),
+                          Transform.scale( scale: 1.5,
+                            child: new Switch(
+                              activeColor: Colors.red.withOpacity(0.1),
+                              inactiveThumbColor: Colors.green.withOpacity(0.1),
+                              inactiveTrackColor: Colors.green,
+                              inactiveThumbImage: const AssetImage("lib/assets/image/unlocked_switch.png"),
+                              activeThumbImage: const AssetImage("lib/assets/image/locked_switch.png"),
+                              value: _state,
+                              onChanged: _onSwitch,
+                            ),
+                          )
+                        ]
+                    )
+                )
+              ],
+            ),
+          ),
+          Expanded(
+              child: Center(
+                child: Text(_state == true ? 'LOCKED' : 'UNLOCK',style: TextStyle(fontWeight: FontWeight. bold, fontSize: 18),
+                ),
+              )
+          )
+        ],
+      ),
+
+    );
+  }
+}
+
+
+class LightWidget extends StatefulWidget {
+  const LightWidget({Key? key}) : super(key: key);
+
+  @override
+  State<LightWidget> createState() => _LightWidgetState();
+}
+class _LightWidgetState extends State<LightWidget> {
+  bool _state = false;
+
+  @override
+  void initState() {
+    getLightStatus().then( (value) =>
+        setState(() {
+          _state = value;
+        })
+    );
+    super.initState();
+  }
+
+  void _onSwitch(bool value) {
+    telegramClient.sendMessage(value == true ? "/light_on" : "/light_off");
+    saveLightStatus(value);
+    getLightStatus().then((value) => {
+      setState(() {
+        _state = value;
+      })
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: (_state == true ? Colors.orangeAccent : Colors.blue)),
+          borderRadius: BorderRadius.circular(17)
+      ),
+      height: 150,
+      width: 150,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
               flex: 2,
-              child: Switch(
-                activeColor: Colors.green.withOpacity(0.1),
-                inactiveThumbColor: Colors.red.withOpacity(0.1),
-                inactiveTrackColor: Colors.red,
-                inactiveThumbImage: const AssetImage("lib/assets/image/unlocked_switch.png"),
-                activeThumbImage: const AssetImage("lib/assets/image/locked_switch.png"),
-                value: _state,
-                onChanged: _onSwitch,
-              )
+              child: Column(
+                children: [
+                  Center(
+                    child: Row(
+                      children:[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20.0, 20.0, 0.0,0.0),
+                          child: Image.asset('lib/assets/image/light.jpg', width: 60,height: 60),
+                        ),
+                        Transform.scale( scale: 1.5,
+                          child: new Switch(
+                            activeColor: Colors.orangeAccent.withOpacity(0.1),
+                            inactiveThumbColor: Colors.blue.withOpacity(0.1),
+                            inactiveTrackColor: Colors.blue,
+                            value: _state,
+                            onChanged: _onSwitch,
+                          ),
+                        )
+                      ]
+                    )
+                  )
+                ],
+          ),
           ),
           Expanded(
               child: Center(
-                child: Text(_state == true ? 'LOCKED' : 'UNLOCKED'),
+                child: Text(_state == true ? 'LIGHT ON' : 'LIGHT OFF',style: TextStyle(fontWeight: FontWeight. bold, fontSize: 18),
+                ),
               )
           )
         ],
       ),
+
     );
   }
 }
