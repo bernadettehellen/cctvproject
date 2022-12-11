@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:customprompt/customprompt.dart';
 import 'package:seguro/globals/database.dart';
 import 'package:seguro/globals/history.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../globals/preferences.dart';
 import '../../globals/storage.dart';
@@ -80,9 +83,10 @@ class _InputPhotoState extends State<InputPhoto> {
         storage.checkIfNameAvailable(_uid, fileName).then((value) {
           if (value == true) {
             storage.uploadFile(_uid, item, "$fileName$index").then((value) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("${filePaths.length} photos uploaded"),
+              showTopSnackBar(
+                Overlay.of(context)!,
+                CustomSnackBar.success(
+                  message: "${filePaths.length} items successfully uploaded",
                 ),
               );
               Navigator.pushReplacement(
@@ -91,9 +95,10 @@ class _InputPhotoState extends State<InputPhoto> {
               );
             });
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Item with this name already exists"),
+            showTopSnackBar(
+              Overlay.of(context)!,
+              const CustomSnackBar.error(
+                message: "Item with that name is already existed",
               ),
             );
           }
@@ -108,9 +113,10 @@ class _InputPhotoState extends State<InputPhoto> {
       storage.checkIfNameAvailable(_uid, fileName).then((value) {
         if (value == true) {
           storage.uploadFile(_uid, imageFromCamera, fileName).then((value) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Photo Uploaded"),
+            showTopSnackBar(
+              Overlay.of(context)!,
+              const CustomSnackBar.success(
+                message: "Upload success",
               ),
             );
             Navigator.pushReplacement(
@@ -119,9 +125,10 @@ class _InputPhotoState extends State<InputPhoto> {
             );
           });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Item with this name already exists"),
+          showTopSnackBar(
+            Overlay.of(context)!,
+            const CustomSnackBar.error(
+              message: "Item with that name is already existed",
             ),
           );
         }
@@ -269,7 +276,26 @@ class _InputPhotoState extends State<InputPhoto> {
                         width: 320,
                         height: 36,
                         child: ElevatedButton(
-                            onPressed: _upload,
+                            onPressed: () {
+                              CustomPrompt(
+                                context: context,
+                                type: Type.confirm,
+                                animDuration: 300,
+                                transparent: true,
+                                color: Colors.blue,
+                                title: 'Confirm',
+                                content: 'Do you agree to upload your photo to SEGURO database ?',
+                                curve: Curves.easeIn,
+                                btnOneText: const Text('No'),
+                                btnTwoText: const Text('Yes'),
+                                btnOneColor: Colors.white,
+                                btnTwoColor: Colors.white,
+                                btnTwoOnClick: () {
+                                  _upload();
+                                  debugPrint("Confirmation Modal : Accepted");
+                                },
+                              ).alert();
+                            },
                             child: const Text("Upload")
                         ),
                       ),

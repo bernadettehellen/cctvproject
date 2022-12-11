@@ -41,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
                 child: Column(
                   children: <Widget>[
-                    logoWidget("lib/assets/image/143215.jpg"),
+                    logoWidget("lib/assets/image/segurologo.jpg"),
                     const SizedBox(
                       height: 0,
                     ),

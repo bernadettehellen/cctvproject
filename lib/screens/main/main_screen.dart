@@ -1,6 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'dart:core';
+import 'package:customprompt/customprompt.dart';
 import 'package:seguro/screens/main/history.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +36,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onLogOut() {
-    logOut().then((value) => {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const SignInScreen())
-      )
-    });
+    CustomPrompt(
+      context: context,
+      type: Type.confirm,
+      animDuration: 300,
+      transparent: true,
+      color: Colors.blue,
+      title: 'Logging Out',
+      content: 'Are you sure ?',
+      curve: Curves.easeIn,
+      btnOneText: const Text('No'),
+      btnTwoText: const Text('Yes'),
+      btnOneColor: Colors.white,
+      btnTwoColor: Colors.white,
+      btnTwoOnClick: () {
+        logOut().then((value) => {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const SignInScreen())
+          )
+        });
+        debugPrint("Log Out Modal : Accepted");
+      },
+    ).alert();
   }
 
   @override

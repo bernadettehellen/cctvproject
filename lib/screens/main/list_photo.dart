@@ -1,7 +1,10 @@
+import 'package:customprompt/customprompt.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../globals/database.dart';
 import '../../globals/history.dart';
@@ -105,17 +108,35 @@ class _ListPhotoState extends State<ListPhoto> {
                                       imageName: snapshot.data!.items[index].name,
                                       imageUrl: snap.data!,
                                       onButtonPressed: () {
-                                        setState(() {
-                                          _result = storage.delete(
-                                              _uid,
-                                              snapshot.data!.items[index].name);
-                                        });
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              content: Text("Deleted"),
-                                            )
-                                        );
-                                        dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 2, date: DateTime.now().millisecondsSinceEpoch));
+                                        CustomPrompt(
+                                          context: context,
+                                          type: Type.confirm,
+                                          animDuration: 300,
+                                          transparent: true,
+                                          color: Colors.blue,
+                                          title: 'Confirmation',
+                                          content: 'Are you sure to delete ${snapshot.data!.items[index].name} ?',
+                                          curve: Curves.easeIn,
+                                          btnOneText: const Text('No'),
+                                          btnTwoText: const Text('Yes'),
+                                          btnOneColor: Colors.white,
+                                          btnTwoColor: Colors.white,
+                                          btnTwoOnClick: () {
+                                            setState(() {
+                                              _result = storage.delete(
+                                                  _uid,
+                                                  snapshot.data!.items[index].name);
+                                            });
+                                            showTopSnackBar(
+                                              Overlay.of(context)!,
+                                              CustomSnackBar.success(
+                                                message: "${snapshot.data!.items[index].name} deleted successfully",
+                                              ),
+                                            );
+                                            dbn.insertNotification(Log(title: "delete photo", message: "success deleting ${snapshot.data!.items[index].name}", type: 2, date: DateTime.now().millisecondsSinceEpoch));
+                                            debugPrint("Confirmation Modal : Accepted");
+                                          },
+                                        ).alert();
                                       },
                                     );
                                   } else {

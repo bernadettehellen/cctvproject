@@ -170,7 +170,7 @@ class _LockWidgetState extends State<LockWidget> {
                             child: Image.asset('lib/assets/image/locked_switch.png', width: 50,height: 50),
                           ),
                           Transform.scale( scale: 1.5,
-                            child: new Switch(
+                            child: Switch(
                               activeColor: Colors.red.withOpacity(0.1),
                               inactiveThumbColor: Colors.green.withOpacity(0.1),
                               inactiveTrackColor: Colors.green,
@@ -188,7 +188,7 @@ class _LockWidgetState extends State<LockWidget> {
           ),
           Expanded(
               child: Center(
-                child: Text(_state == true ? 'LOCKED' : 'UNLOCK',style: TextStyle(fontWeight: FontWeight. bold, fontSize: 18),
+                child: Text(_state == true ? 'LOCKED' : 'UNLOCKED',style: const TextStyle(fontWeight: FontWeight. bold, fontSize: 18),
                 ),
               )
           )
@@ -250,11 +250,11 @@ class _LightWidgetState extends State<LightWidget> {
                     child: Row(
                       children:[
                         Padding(
-                          padding: EdgeInsets.fromLTRB(20.0, 20.0, 0.0,0.0),
-                          child: Image.asset('lib/assets/image/light.jpg', width: 60,height: 60),
+                          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0.0,0.0),
+                          // child: Image.asset('lib/assets/image/light.jpg', width: 60,height: 60),
                         ),
                         Transform.scale( scale: 1.5,
-                          child: new Switch(
+                          child: Switch(
                             activeColor: Colors.orangeAccent.withOpacity(0.1),
                             inactiveThumbColor: Colors.blue.withOpacity(0.1),
                             inactiveTrackColor: Colors.blue,
@@ -266,17 +266,15 @@ class _LightWidgetState extends State<LightWidget> {
                     )
                   )
                 ],
-          ),
+              ),
           ),
           Expanded(
               child: Center(
-                child: Text(_state == true ? 'LIGHT ON' : 'LIGHT OFF',style: TextStyle(fontWeight: FontWeight. bold, fontSize: 18),
-                ),
+                child: Text(_state == true ? 'LIGHT ON' : 'LIGHT OFF',style: const TextStyle(fontWeight: FontWeight. bold, fontSize: 18),),
               )
           )
         ],
       ),
-
     );
   }
 }
