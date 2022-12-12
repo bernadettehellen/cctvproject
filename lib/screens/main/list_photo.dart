@@ -32,7 +32,7 @@ class _ListPhotoState extends State<ListPhoto> {
     // 1 => SD Card
     // 0 => Internal Memory
     if (storageInfo.isNotEmpty) {
-      path = (storageInfo.length == 2) ? "${storageInfo[1].rootDir}/cctv/$_uid" : "${storageInfo[0].rootDir}/cctv/$_uid";
+      path = (storageInfo.length == 2) ? "${storageInfo[0].rootDir}/cctv/$_uid" : "${storageInfo[0].rootDir}/cctv/$_uid";
       if (await Permission.manageExternalStorage.request().isGranted) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -161,7 +161,7 @@ class _ListPhotoState extends State<ListPhoto> {
             margin: const EdgeInsets.fromLTRB(64, 16, 64, 8),
             child: ElevatedButton(
               onPressed: _onDownload,
-              child: const Text("Save to SD Card"),
+              child: const Text("Download"),
             ),
           )
         ],

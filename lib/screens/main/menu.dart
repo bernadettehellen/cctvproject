@@ -46,7 +46,7 @@ class Menu extends StatelessWidget {
                         ButtonImage(
                           name: "CCTV",
                           iconURL: "lib/assets/image/icon_cctv.jpeg",
-                          navigateTo: CCTV(channel: "channel"),
+                          navigateTo: CCTV(channel: "http://192.168.43.105:81/stream"),
                         ),
                       ],
                     ),
@@ -251,7 +251,7 @@ class _LightWidgetState extends State<LightWidget> {
                       children:[
                         Padding(
                           padding: const EdgeInsets.fromLTRB(20.0, 20.0, 0.0,0.0),
-                          // child: Image.asset('lib/assets/image/light.jpg', width: 60,height: 60),
+                           child: Image.asset('lib/assets/image/light.jpg', width: 60,height: 60),
                         ),
                         Transform.scale( scale: 1.5,
                           child: Switch(

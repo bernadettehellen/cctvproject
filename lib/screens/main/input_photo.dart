@@ -98,7 +98,7 @@ class _InputPhotoState extends State<InputPhoto> {
             showTopSnackBar(
               Overlay.of(context)!,
               const CustomSnackBar.error(
-                message: "Item with that name is already existed",
+                message: "Item with that name already existed",
               ),
             );
           }
