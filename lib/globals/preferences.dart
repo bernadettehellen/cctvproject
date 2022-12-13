@@ -13,7 +13,7 @@ Future<String> getUID() async {
 
 Future<bool> isLoggedIn() async {
   final prefs = await SharedPreferences.getInstance();
-  if (prefs.getString('uid') == "") {
+  if (prefs.getString('uid') == "" || prefs.getString('uid') == null) {
     return false;
   }
   return true;
