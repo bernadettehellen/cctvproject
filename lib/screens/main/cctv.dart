@@ -14,10 +14,10 @@ class CCTV extends StatefulWidget {
 }
 
 class _CCTVState extends State<CCTV> {
-  final vidWidth = 1200;
-  final vidHeight = 900;
+  final vidWidth = 1600;
+  final vidHeight = 1200;
 
-  double newVidSizeWidth = 900;
+  double newVidSizeWidth = 1600;
   double newVidSizeHeight = 1200;
 
   bool isLandscape = false;
@@ -57,9 +57,11 @@ class _CCTVState extends State<CCTV> {
   @override
   Widget build(BuildContext context) {
     bool isRunning = true;
-    return Expanded(
-        child: Container(
-      color: Colors.red,
+    return Row(
+      children: [
+    Expanded(
+    child: Container(
+    color: Colors.red,
       child: OrientationBuilder(
         builder: (context, orientation) {
           var screenWidth = MediaQuery.of(context).size.width;
@@ -68,17 +70,17 @@ class _CCTVState extends State<CCTV> {
           if (orientation == Orientation.portrait) {
             isLandscape = false;
             newVidSizeWidth =
-                (screenWidth > vidWidth ? vidWidth : screenWidth) as double;
+            (screenWidth > vidWidth ? vidWidth : screenWidth) as double;
             newVidSizeHeight = (vidHeight * newVidSizeWidth / vidWidth);
           } else {
             isLandscape = true;
             newVidSizeHeight =
-                (screenHeight > vidHeight ? vidHeight : screenHeight) as double;
+            (screenHeight > vidHeight ? vidHeight : screenHeight) as double;
             newVidSizeWidth = (vidWidth * newVidSizeHeight / vidHeight);
           }
 
           return Container(
-              color: Colors.blueAccent,
+              color: Colors.black,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -94,34 +96,36 @@ class _CCTVState extends State<CCTV> {
                       ),
                       Positioned.fill(
                           child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Column(
-                          children: <Widget>[
-                            const SizedBox(
-                              height: 16,
+                            alignment: Alignment.topCenter,
+                            child: Column(
+                              children: <Widget>[
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                const Text(
+                                  "Camera View",
+                                  style: TextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.w300),
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  "Live | $_timeString",
+                                  style: const TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.w300),
+                                ),
+                              ],
                             ),
-                            const Text(
-                              "Camera View",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w300),
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              "Live | $_timeString",
-                              style: const TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w300),
-                            ),
-                          ],
-                        ),
-                      ))
+                          ))
                     ],
                   )
                 ],
               ));
         },
       ),
-    ));
+    ))
+      ],
+    );
   }
 }

@@ -258,14 +258,14 @@ class _InputPhotoState extends State<InputPhoto> {
                           const SizedBox(
                             width: 10,
                           ),
-                          SizedBox(
-                            width: 100,
-                            height: 36,
-                            child: ElevatedButton(
-                                onPressed: _camera,
-                                child: const Text("CCTV")
-                            ),
-                          )
+                          // SizedBox(
+                          //   width: 100,
+                          //   height: 36,
+                          //   child: ElevatedButton(
+                          //       onPressed: _camera,
+                          //       child: const Text("CCTV")
+                          //   ),
+                          // )
                         ],
                       ),
                     ),

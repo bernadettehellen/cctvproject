@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-final TelegramClient telegramClient = TelegramClient(chatId: "-819945622", botToken: "5845476657:AAHxvgq5S-gvz3rWuIFeSYCVTTLW1_Wa6eQ");
+final TelegramClient telegramClient = TelegramClient(chatId: "-819945622", botToken: "5708678826:AAG7z8HgLLokLopeY5gtG-FkocKHokhIXwY");
 
 class TelegramClient {
   final String chatId;
