@@ -80,12 +80,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   itemCount: snapshot.data!.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return Item(
-                      id: snapshot.data![index].id,
-                      title: snapshot.data![index].title,
-                      message: snapshot.data![index].message,
-                      type: snapshot.data![index].type,
-                      date: snapshot.data![index].date,
+                    return Dismissible(
+                        key: ValueKey<int>(snapshot.data![index].id),
+                        onDismissed: (DismissDirection direction) {
+                          setState(() {
+                            _logs = dbn.deleteAt(snapshot.data![index].id);
+                          });
+                        },
+                        child: Item(
+                          id: snapshot.data![index].id,
+                          title: snapshot.data![index].title,
+                          message: snapshot.data![index].message,
+                          type: snapshot.data![index].type,
+                          date: snapshot.data![index].date,
+                        )
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
